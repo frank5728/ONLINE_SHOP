@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .payment-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h1 {
+            color: green;
+            margin-bottom: 25px;
+        }
+
+        .product {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .total {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 25px 0;
+        }
+
+        .payment-number {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0 20px;
+        }
+
+        .payment-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 10px 0 25px;
+        }
+
+        .instruction {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            margin-top: 25px;
+        }
+
+        .back-btn,
+        .status-btn,
+        .cancel-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 5px;
+        }
+
+        .back-btn {
+            background: #007bff;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+
+        .status-btn {
+            background: #28a745;
+        }
+
+        .status-btn:hover {
+            background: #218838;
+        }
+
+        .cancel-btn {
+            background: #dc3545;
+        }
+
+        .cancel-btn:hover {
+            background: #b02a37;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="payment-container">
+
+    <h1>✅ Order Imepokelewa!</h1>
+
+    <p class="product">
+        Product:
+        <strong>{{ order.product.name }}</strong>
+    </p>
+
+    <p class="product">
+        Size:
+        <strong>{{ order.size.name }}</strong>
+    </p>
+
+    <p class="product">
+        Quantity:
+        <strong>{{ order.quantity }}</strong>
+    </p>
+
+    <div class="total">
+        Total Price: {{ order.total_price }} TZS
+    </div>
+
+    <hr>
+
+    <p>
+        <strong>Fanya malipo kupitia namba:</strong>
+    </p>
+
+    <div class="payment-number">
+        0783707512
+    </div>
+
+    <p>
+        <strong>Jina la anayepokea malipo:</strong>
+    </p>
+
+    <div class="payment-name">
+        FRANK LUCAS MLYAKALAMU
+    </div>
+
+    <p class="instruction">
+        Tafadhali lipia kiasi cha
+        <strong>{{ order.total_price }} TZS</strong>
+        kupitia namba hiyo hapo juu.
+    </p>
+
+    <p>
+        Baada ya kufanya malipo, hifadhi uthibitisho wa malipo.
+    </p>
+
+    <div class="buttons">
+
+        <a href="/" class="back-btn">
+            🏠 Back to Shop
+        </a>
+
+        <a
+            href="{% url 'order_status' order.id %}"
+            class="status-btn"
+        >
+            📦 Check Order Status
+        </a>
+
+        <a
+            href="{% url 'cancel_order' order.id %}"
+            class="cancel-btn"
+        >
+            ❌ Cancel Order
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

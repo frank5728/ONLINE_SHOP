@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Order Status</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .order-info {
+            line-height: 1.8;
+            font-size: 17px;
+        }
+
+        .status-box {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .processing {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .status-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 7px;
+            margin-top: 25px;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📦 Order Status</h1>
+
+    <div class="order-info">
+
+        <p>
+            <strong>Customer:</strong>
+            {{ order.customer_name }}
+        </p>
+
+        <p>
+            <strong>Product:</strong>
+            {{ order.product.name }}
+        </p>
+
+        <p>
+            <strong>Size:</strong>
+            {{ order.size.name }}
+        </p>
+
+        <p>
+            <strong>Quantity:</strong>
+            {{ order.quantity }}
+        </p>
+
+        <p>
+            <strong>Total Price:</strong>
+            {{ order.total_price }} TZS
+        </p>
+
+    </div>
+
+
+    {% if order.status == "Pending" %}
+
+        <div class="status-box pending">
+
+            <div class="status-title">
+                Current Status
+            </div>
+
+            <div class="status">
+                🟡 Pending
+            </div>
+
+            <div class="message">
+                Order yako imepokelewa na inasubiri kushughulikiwa.
+            </div>
+
+        </div>
+
+
+    {% elif order.status == "Processing" %}
+
+        <div class="status-box processing">
+
+            <div class="status-title">
+                Current Status
+            </div>
+
+            <div class="status">
+                🔵 Processing
+            </div>
+
+            <div class="message">
+                Order yako iko kwenye mchakato wa maandalizi.
+            </div>
+
+        </div>
+
+
+    {% elif order.status == "Completed" %}
+
+        <div class="status-box completed">
+
+            <div class="status-title">
+                Current Status
+            </div>
+
+            <div class="status">
+                🟢 Completed
+            </div>
+
+            <div class="message">
+                Order yako imekamilika.
+            </div>
+
+        </div>
+
+
+    {% elif order.status == "Cancelled" %}
+
+        <div class="status-box cancelled">
+
+            <div class="status-title">
+                Current Status
+            </div>
+
+            <div class="status">
+                🔴 Cancelled
+            </div>
+
+            <div class="message">
+                Order yako imeghairiwa.
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <a href="/" class="back-btn">
+        🏠 Back to Shop
+    </a>
+
+</div>
+
+</body>
+</html>

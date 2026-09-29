@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Place Order</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .form-container {
+            max-width: 550px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .info {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .total-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .total-box h2 {
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="form-container">
+
+    <h1>🛒 Weka Order Yako</h1>
+
+    <div class="info">
+
+        <strong>Jaza taarifa zako kwa usahihi.</strong>
+
+        <br>
+
+        Baada ya kutuma order utaonyeshwa jumla ya bei na taarifa za malipo.
+
+    </div>
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <!-- PRODUCT -->
+
+        <label>Choose Product:</label>
+
+        <select
+            name="product_id"
+            id="product"
+            required
+        >
+
+            <option value="" disabled>
+                -- Select Product --
+            </option>
+
+            {% for product in products %}
+
+                <option
+                    value="{{ product.id }}"
+                    data-price="{{ product.price }}"
+                    {% if product.id|stringformat:"s" == selected_product_id %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ product.name }} - {{ product.price }} TZS
+
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <!-- SIZE -->
+
+        <label>Choose Size:</label>
+
+        <select
+            name="size"
+            id="size"
+            required
+        >
+
+            <option value="" selected disabled>
+                -- Select Size --
+            </option>
+
+        </select>
+
+
+        <!-- QUANTITY -->
+
+        <label>Quantity:</label>
+
+        <input
+            type="number"
+            name="quantity"
+            id="quantity"
+            min="1"
+            value="1"
+            required
+        >
+
+
+        <!-- TOTAL -->
+
+        <div class="total-box">
+
+            <h2>
+
+                Total Price:
+
+                <span id="total">0</span>
+
+                TZS
+
+            </h2>
+
+        </div>
+
+
+        <!-- CUSTOMER NAME -->
+
+        <label>Name:</label>
+
+        <input
+            type="text"
+            name="customer_name"
+            placeholder="Enter your full name"
+            required
+        >
+
+
+        <!-- PHONE -->
+
+        <label>Phone Number:</label>
+
+        <input
+            type="text"
+            name="phone"
+            placeholder="Enter phone number"
+            required
+        >
+
+
+        <!-- LOCATION -->
+
+        <label>Where do you live?</label>
+
+        <input
+            type="text"
+            name="location"
+            placeholder="Enter your location/address"
+            required
+        >
+
+
+        <!-- SUBMIT -->
+
+        <button type="submit">
+
+            🛍️ Send Order
+
+        </button>
+
+    </form>
+
+
+    <a href="{% url 'shop_home' %}" class="back">
+
+        ← Back to Shop
+
+    </a>
+
+</div>
+
+
+<script>
+
+    const product = document.getElementById("product");
+
+    const size = document.getElementById("size");
+
+    const quantity = document.getElementById("quantity");
+
+    const total = document.getElementById("total");
+
+
+    // -------------------------------------------------
+    // LOAD SIZES FOR SELECTED PRODUCT
+    // -------------------------------------------------
+
+    async function loadSizes() {
+
+        const productId = product.value;
+
+
+        size.innerHTML = "";
+
+
+        const defaultOption =
+            document.createElement("option");
+
+
+        defaultOption.value = "";
+
+        defaultOption.textContent =
+            "-- Select Size --";
+
+        defaultOption.disabled = true;
+
+        defaultOption.selected = true;
+
+
+        size.appendChild(defaultOption);
+
+
+        if (!productId) {
+
+            calculateTotal();
+
+            return;
+
+        }
+
+
+        try {
+
+            const response = await fetch(
+                "{% url 'product_sizes' %}?product_id=" + productId
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load product sizes"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            data.sizes.forEach(function(item) {
+
+                const option =
+                    document.createElement("option");
+
+
+                option.value = item.id;
+
+                option.textContent = item.name;
+
+
+                size.appendChild(option);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Error loading sizes:",
+                error
+            );
+
+        }
+
+
+        calculateTotal();
+
+    }
+
+
+    // -------------------------------------------------
+    // CALCULATE TOTAL PRICE
+    // -------------------------------------------------
+
+    function calculateTotal() {
+
+        const selectedOption =
+            product.options[
+                product.selectedIndex
+            ];
+
+
+        if (!selectedOption) {
+
+            total.textContent = "0";
+
+            return;
+
+        }
+
+
+        const price =
+            parseFloat(
+                selectedOption.getAttribute(
+                    "data-price"
+                )
+            ) || 0;
+
+
+        const qty =
+            parseInt(
+                quantity.value
+            ) || 1;
+
+
+        const totalPrice =
+            price * qty;
+
+
+        total.textContent =
+            totalPrice.toLocaleString();
+
+    }
+
+
+    // -------------------------------------------------
+    // PRODUCT CHANGE
+    // -------------------------------------------------
+
+    product.addEventListener(
+        "change",
+        function() {
+
+            loadSizes();
+
+            calculateTotal();
+
+        }
+    );
+
+
+    // -------------------------------------------------
+    // QUANTITY CHANGE
+    // -------------------------------------------------
+
+    quantity.addEventListener(
+        "input",
+        calculateTotal
+    );
+
+
+    // -------------------------------------------------
+    // LOAD INITIAL PRODUCT AND SIZES
+    // -------------------------------------------------
+
+    window.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            if (product.value) {
+
+                loadSizes();
+
+            }
+
+            calculateTotal();
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

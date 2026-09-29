@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Online Shop</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            padding: 55px 20px 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 42px;
+            color: #222;
+        }
+
+        .header p {
+            margin-top: 12px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 35px 25px;
+            text-align: center;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+            transition: transform 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+
+            box-shadow:
+                0 14px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        .icon {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        .card h2 {
+            margin: 10px 0;
+            font-size: 25px;
+            color: #222;
+        }
+
+        .card p {
+            color: #666;
+            min-height: 50px;
+            line-height: 1.5;
+        }
+
+        .button {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 13px 25px;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .customer {
+            border-top: 6px solid #007bff;
+        }
+
+        .customer .button {
+            background: #007bff;
+        }
+
+        .customer .button:hover {
+            background: #0056b3;
+        }
+
+        .chatbot {
+            border-top: 6px solid #6f42c1;
+        }
+
+        .chatbot .button {
+            background: #6f42c1;
+        }
+
+        .chatbot .button:hover {
+            background: #4e2c8a;
+        }
+
+        .admin {
+            border-top: 6px solid #28a745;
+        }
+
+        .admin .button {
+            background: #28a745;
+        }
+
+        .admin .button:hover {
+            background: #1e7e34;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 35px 20px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 850px) {
+
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .header h1 {
+                font-size: 34px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            🛍️ ONLINE SHOP
+        </h1>
+
+        <p>
+            Welcome to our Online Shop Management System
+        </p>
+
+    </div>
+
+
+    <!-- MAIN OPTIONS -->
+
+    <div class="container">
+
+
+        <!-- CUSTOMER SHOP -->
+
+        <div class="card customer">
+
+            <div class="icon">
+                👤
+            </div>
+
+            <h2>
+                Customer Shop
+            </h2>
+
+            <p>
+                View available products, prices and sizes,
+                then place your order.
+            </p>
+
+            <a
+                href="{% url 'shop_home' %}"
+                class="button"
+            >
+                🛍️ Enter Shop
+            </a>
+
+        </div>
+
+
+        <!-- CHATBOT -->
+
+        <div class="card chatbot">
+
+            <div class="icon">
+                🤖
+            </div>
+
+            <h2>
+                Shop Chatbot
+            </h2>
+
+            <p>
+                Ask questions about products, prices,
+                sizes, ordering and payment.
+            </p>
+
+            <a
+                href="{% url 'chatbot' %}"
+                class="button"
+            >
+                💬 Open Chatbot
+            </a>
+
+        </div>
+
+
+        <!-- ADMIN -->
+
+        <div class="card admin">
+
+            <div class="icon">
+                🔐
+            </div>
+
+            <h2>
+                Admin
+            </h2>
+
+            <p>
+                Manage products, sizes and customer
+                orders through the administration panel.
+            </p>
+
+            <a
+                href="{% url 'admin:index' %}"
+                class="button"
+            >
+                ⚙️ Admin Panel
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        © 2026 Online Shop Management System
+
+    </div>
+
+
+</body>
+
+</html>

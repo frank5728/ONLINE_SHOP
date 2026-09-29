@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Online Shop Assistant</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e3f2fd,
+                    #f8f9fa
+                );
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+        }
+
+
+        .chat-container {
+
+            width: 450px;
+
+            max-width: 95%;
+
+            height: 680px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 35px
+                rgba(0,0,0,0.15);
+
+            display: flex;
+
+            flex-direction: column;
+
+            overflow: hidden;
+
+        }
+
+
+        .chat-header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #007bff,
+                    #0056b3
+                );
+
+            color: white;
+
+            padding: 22px;
+
+            text-align: center;
+
+        }
+
+
+        .chat-header h2 {
+
+            margin: 0 0 8px 0;
+
+        }
+
+
+        .chat-header p {
+
+            margin: 0;
+
+            font-size: 14px;
+
+        }
+
+
+        .language-section {
+
+            padding: 15px;
+
+            background: #f8f9fa;
+
+            text-align: center;
+
+            border-bottom: 1px solid #ddd;
+
+        }
+
+
+        .language-section p {
+
+            margin: 0 0 10px 0;
+
+            font-weight: bold;
+
+        }
+
+
+        .language-button {
+
+            padding: 8px 18px;
+
+            margin: 4px;
+
+            border: none;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+            background: #ddd;
+
+            font-weight: bold;
+
+        }
+
+
+        .language-button.active {
+
+            background: #007bff;
+
+            color: white;
+
+        }
+
+
+        .chat-messages {
+
+            flex: 1;
+
+            padding: 15px;
+
+            overflow-y: auto;
+
+        }
+
+
+        .message {
+
+            padding: 12px 15px;
+
+            margin: 10px 0;
+
+            border-radius: 15px;
+
+            max-width: 82%;
+
+            white-space: pre-line;
+
+            line-height: 1.5;
+
+        }
+
+
+        .bot {
+
+            background: #e9ecef;
+
+            margin-right: auto;
+
+        }
+
+
+        .user {
+
+            background: #007bff;
+
+            color: white;
+
+            margin-left: auto;
+
+        }
+
+
+        .chat-input {
+
+            display: flex;
+
+            padding: 12px;
+
+            border-top: 1px solid #ddd;
+
+            background: white;
+
+        }
+
+
+        .chat-input input {
+
+            flex: 1;
+
+            padding: 13px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 15px;
+
+        }
+
+
+        .chat-input button {
+
+            margin-left: 8px;
+
+            padding: 13px 20px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #007bff;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .chat-input button:hover {
+
+            background: #0056b3;
+
+        }
+
+
+        .chat-input button:disabled {
+
+            background: #999;
+
+            cursor: not-allowed;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="chat-container">
+
+
+    <!-- HEADER -->
+
+    <div class="chat-header">
+
+        <h2>
+            🤖 Online Shop Assistant
+        </h2>
+
+        <p>
+            Your smart shopping assistant
+        </p>
+
+    </div>
+
+
+    <!-- LANGUAGE -->
+
+    <div class="language-section">
+
+        <p>
+            Choose language / Chagua lugha
+        </p>
+
+
+        <button
+            id="swButton"
+            class="language-button active"
+            onclick="selectLanguage('sw')"
+        >
+            🇹🇿 Kiswahili
+        </button>
+
+
+        <button
+            id="enButton"
+            class="language-button"
+            onclick="selectLanguage('en')"
+        >
+            🇬🇧 English
+        </button>
+
+    </div>
+
+
+    <!-- MESSAGES -->
+
+    <div
+        class="chat-messages"
+        id="messages"
+    >
+
+        <div
+            class="message bot"
+            id="welcomeMessage"
+        >
+
+            Habari! 👋
+
+            Karibu kwenye Online Shop yetu.
+
+            Naweza kukusaidia kuhusu:
+            • Bidhaa
+            • Bei
+            • Size
+            • Jinsi ya kuagiza
+            • Malipo
+
+            Uliza swali lako.
+
+        </div>
+
+    </div>
+
+
+    <!-- INPUT -->
+
+    <div class="chat-input">
+
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Andika swali lako..."
+            autocomplete="off"
+            onkeydown="handleEnter(event)"
+        >
+
+
+        <button
+            id="sendButton"
+            onclick="sendMessage()"
+        >
+            Send
+        </button>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+let selectedLanguage = "sw";
+
+
+
+/* =========================
+   LANGUAGE SELECTION
+========================= */
+
+function selectLanguage(language) {
+
+    selectedLanguage = language;
+
+
+    const swButton =
+        document.getElementById("swButton");
+
+
+    const enButton =
+        document.getElementById("enButton");
+
+
+    const input =
+        document.getElementById("userInput");
+
+
+    const welcome =
+        document.getElementById("welcomeMessage");
+
+
+    if (language === "sw") {
+
+        swButton.classList.add("active");
+
+        enButton.classList.remove("active");
+
+
+        input.placeholder =
+            "Andika swali lako...";
+
+
+        welcome.innerText =
+            "Habari! 👋\n\n"
+            + "Karibu kwenye Online Shop yetu.\n\n"
+            + "Naweza kukusaidia kuhusu:\n"
+            + "• Bidhaa\n"
+            + "• Bei\n"
+            + "• Size\n"
+            + "• Jinsi ya kuagiza\n"
+            + "• Malipo\n\n"
+            + "Uliza swali lako.";
+
+    }
+
+
+    else {
+
+        enButton.classList.add("active");
+
+        swButton.classList.remove("active");
+
+
+        input.placeholder =
+            "Type your question...";
+
+
+        welcome.innerText =
+            "Hello! 👋\n\n"
+            + "Welcome to our Online Shop.\n\n"
+            + "I can help you with:\n"
+            + "• Products\n"
+            + "• Prices\n"
+            + "• Sizes\n"
+            + "• How to order\n"
+            + "• Payment\n\n"
+            + "Ask your question.";
+
+    }
+
+}
+
+
+
+/* =========================
+   GET CSRF TOKEN
+========================= */
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+
+    if (
+        document.cookie &&
+        document.cookie !== ""
+    ) {
+
+        const cookies =
+            document.cookie.split(";");
+
+
+        for (
+            let i = 0;
+            i < cookies.length;
+            i++
+        ) {
+
+            const cookie =
+                cookies[i].trim();
+
+
+            if (
+                cookie.substring(
+                    0,
+                    name.length + 1
+                ) ===
+                name + "="
+            ) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    return cookieValue;
+
+}
+
+
+
+const csrftoken =
+    getCookie("csrftoken");
+
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+}
+
+
+
+/* =========================
+   ADD MESSAGE
+========================= */
+
+function addMessage(
+    text,
+    type
+) {
+
+    const messages =
+        document.getElementById("messages");
+
+
+    const message =
+        document.createElement("div");
+
+
+    message.className =
+        "message " + type;
+
+
+    message.innerText =
+        String(text);
+
+
+    messages.appendChild(message);
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+
+/* =========================
+   SEND MESSAGE
+========================= */
+
+async function sendMessage() {
+
+    const input =
+        document.getElementById("userInput");
+
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+
+    const message =
+        input.value.trim();
+
+
+    if (message === "") {
+
+        return;
+
+    }
+
+
+    /* Show user's message */
+
+    addMessage(
+        message,
+        "user"
+    );
+
+
+    input.value = "";
+
+
+    /* Loading message */
+
+    const loadingText =
+        selectedLanguage === "sw"
+            ? "⏳ Inatafuta taarifa kwenye mfumo..."
+            : "⏳ Searching the shop information...";
+
+
+    addMessage(
+        loadingText,
+        "bot"
+    );
+
+
+    sendButton.disabled = true;
+
+
+    try {
+
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "message",
+            message
+        );
+
+
+        formData.append(
+            "language",
+            selectedLanguage
+        );
+
+
+        const response =
+            await fetch(
+                "/chatbot/api/",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "X-CSRFToken":
+                            csrftoken
+
+                    },
+
+                    body: formData
+
+                }
+            );
+
+
+        /* Check HTTP status */
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP error: " +
+                response.status
+            );
+
+        }
+
+
+        /* Convert response to JSON */
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Chatbot API response:",
+            data
+        );
+
+
+        /* Remove loading message */
+
+        const messages =
+            document.getElementById("messages");
+
+
+        const lastMessage =
+            messages.lastElementChild;
+
+
+        if (
+            lastMessage &&
+            lastMessage.innerText ===
+            loadingText
+        ) {
+
+            messages.removeChild(
+                lastMessage
+            );
+
+        }
+
+
+        /*
+            Support different possible
+            API response field names.
+        */
+
+        const botReply =
+            data.reply ??
+            data.response ??
+            data.answer ??
+            data.message;
+
+
+        /* Prevent undefined */
+
+        if (
+            botReply === undefined ||
+            botReply === null ||
+            botReply === ""
+        ) {
+
+            throw new Error(
+                "API did not return a chatbot reply."
+            );
+
+        }
+
+
+        /* Show chatbot response */
+
+        addMessage(
+            botReply,
+            "bot"
+        );
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "Chatbot error:",
+            error
+        );
+
+
+        /* Remove loading message */
+
+        const messages =
+            document.getElementById("messages");
+
+
+        const lastMessage =
+            messages.lastElementChild;
+
+
+        if (
+            lastMessage &&
+            lastMessage.innerText ===
+            loadingText
+        ) {
+
+            messages.removeChild(
+                lastMessage
+            );
+
+        }
+
+
+        const errorMessage =
+            selectedLanguage === "sw"
+                ? "❌ Samahani, kuna tatizo la kuwasiliana na chatbot."
+                : "❌ Sorry, there was a problem communicating with the chatbot.";
+
+
+        addMessage(
+            errorMessage,
+            "bot"
+        );
+
+    }
+
+
+    finally {
+
+        sendButton.disabled = false;
+
+        input.focus();
+
+    }
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

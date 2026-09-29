@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Online Shop</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 45px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            background: white;
+            width: 280px;
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .icon {
+            font-size: 55px;
+        }
+
+        .option h2 {
+            margin: 15px 0 10px;
+        }
+
+        .option p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            width: 80%;
+            padding: 13px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .customer-button {
+            background: #007bff;
+        }
+
+        .chatbot-button {
+            background: #28a745;
+        }
+
+        .admin-button {
+            background: #343a40;
+        }
+
+        .customer-button:hover {
+            background: #0056b3;
+        }
+
+        .chatbot-button:hover {
+            background: #1e7e34;
+        }
+
+        .admin-button:hover {
+            background: #1d2124;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>🛍️ ONLINE SHOP</h1>
+
+    <p class="subtitle">
+        Karibu! Chagua jinsi unavyotaka kuendelea.
+    </p>
+
+
+    <div class="options">
+
+
+        <!-- CUSTOMER -->
+
+        <div class="option">
+
+            <div class="icon">
+                👤
+            </div>
+
+            <h2>Customer</h2>
+
+            <p>
+                Angalia bidhaa na weka order yako.
+            </p>
+
+            <a
+                href="/shop/"
+                class="button customer-button"
+            >
+                🛒 Continue as Customer
+            </a>
+
+        </div>
+
+
+        <!-- CHATBOT -->
+
+        <div class="option">
+
+            <div class="icon">
+                🤖
+            </div>
+
+            <h2>Shop Assistant</h2>
+
+            <p>
+                Uliza maswali kuhusu bidhaa, bei na orders.
+            </p>
+
+            <a
+                href="/chatbot/"
+                class="button chatbot-button"
+            >
+                💬 Chat with Assistant
+            </a>
+
+        </div>
+
+
+        <!-- ADMIN -->
+
+        <div class="option">
+
+            <div class="icon">
+                🔐
+            </div>
+
+            <h2>Admin</h2>
+
+            <p>
+                Simamia bidhaa na orders za wateja.
+            </p>
+
+            <a
+                href="/admin/"
+                class="button admin-button"
+            >
+                🔐 Admin Login
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

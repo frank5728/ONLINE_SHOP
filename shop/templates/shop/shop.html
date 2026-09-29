@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Customer Shop</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #222;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 35px 20px;
+        text-align: center;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 38px;
+    }
+
+    .header p {
+        margin-top: 10px;
+        font-size: 17px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .top-bar h2 {
+        margin: 0;
+    }
+
+    .buttons a {
+        display: inline-block;
+        padding: 11px 18px;
+        margin-left: 5px;
+        border-radius: 7px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+    }
+
+    .order-btn {
+        background: #28a745;
+    }
+
+    .chat-btn {
+        background: #6f42c1;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        transition: 0.3s;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    /* PRODUCT IMAGE IS CLICKABLE */
+    .product-image-link {
+        display: block;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        background: #eee;
+        display: block;
+    }
+
+    .product-info {
+        padding: 20px;
+    }
+
+    .product-info h3 {
+        margin-top: 0;
+        font-size: 22px;
+    }
+
+    .price {
+        color: #007bff;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .sizes {
+        margin-top: 12px;
+    }
+
+    .size {
+        display: inline-block;
+        background: #eef3f8;
+        padding: 6px 10px;
+        margin: 3px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .buy-btn {
+        display: block;
+        text-align: center;
+        background: #28a745;
+        color: white;
+        padding: 11px;
+        margin-top: 15px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .buy-btn:hover {
+        background: #1e7e34;
+    }
+
+    .empty {
+        background: white;
+        padding: 40px;
+        text-align: center;
+        border-radius: 12px;
+    }
+
+    @media (max-width: 900px) {
+        .products {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .products {
+            grid-template-columns: 1fr;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🛍️ Customer Shop</h1>
+    <p>View available products, prices and sizes</p>
+</div>
+
+<div class="container">
+
+```
+<div class="top-bar">
+
+    <h2>Available Products</h2>
+
+    <div class="buttons">
+
+        <a href="{% url 'order' %}" class="order-btn">
+            🛒 Place Order
+        </a>
+
+        <a href="{% url 'chatbot' %}" class="chat-btn">
+            🤖 Chatbot
+        </a>
+
+    </div>
+
+</div>
+
+
+{% if products %}
+
+<div class="products">
+
+    {% for product in products %}
+
+    <div class="product-card">
+
+        <!-- CLICKING IMAGE OPENS ORDER FOR THIS PRODUCT -->
+        <a
+            href="{% url 'order' %}?product_id={{ product.id }}"
+            class="product-image-link"
+        >
+
+            {% if product.image %}
+
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.name }}"
+                    class="product-image"
+                >
+
+            {% else %}
+
+                <div class="product-image"></div>
+
+            {% endif %}
+
+        </a>
+
+
+        <div class="product-info">
+
+            <h3>{{ product.name }}</h3>
+
+            <div class="price">
+                TSh {{ product.price }}
+            </div>
+
+
+            <div class="sizes">
+
+                <strong>Available Sizes:</strong>
+
+                {% for size in product.sizes.all %}
+
+                    <span class="size">
+                       {{ size.name }
+                    </span>
+
+                {% empty %}
+                    <span>No sizes available</span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- ORDER THIS SPECIFIC PRODUCT -->
+            <a
+                href="{% url 'order' %}?product_id={{ product.id }}"
+                class="buy-btn"
+            >
+                🛒 Order Now
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty">
+
+    <h2>No products available</h2>
+
+    <p>Please check again later.</p>
+
+</div>
+
+{% endif %}
+```
+
+</div>
+
+</body>
+</html>
